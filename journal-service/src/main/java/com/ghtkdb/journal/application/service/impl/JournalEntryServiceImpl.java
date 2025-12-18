@@ -36,16 +36,17 @@ public class JournalEntryServiceImpl implements JournalEntryService {
     @Override
     public JournalEntry updateJournalEntryById(String uuid, JournalEntry newEntry) {
 
-        JournalEntry oldEntry = journalEntryRepository.findById(uuid).orElse(null);
-
-        newEntry.setDate(LocalDateTime.now());
+        JournalEntry oldEntry = journalEntryRepository.findById(uuid).orElseThrow(null);
 
         if (oldEntry != null ){
-            oldEntry.setTitle(newEntry.getTitle() != null && newEntry.getTitle().equals("") ? newEntry.getTitle() : oldEntry.getTitle());
-            oldEntry.setContent(newEntry.getTitle() != null && newEntry.getContent().equals("") ? newEntry.getContent() : oldEntry.getContent());
-            oldEntry.setId(newEntry.getId() != null && newEntry.getId().equals("") ? newEntry.getId() : oldEntry.getId());
+            oldEntry.setTitle(newEntry.getTitle());
+            oldEntry.setContent(newEntry.getTitle());
+            oldEntry.setId(newEntry.getId());
+            oldEntry.setDate(LocalDateTime.now());
+
+            journalEntryRepository.save(oldEntry);
         }
-        journalEntryRepository.save(oldEntry);
+
         return oldEntry;
     }
 

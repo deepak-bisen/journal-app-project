@@ -1,0 +1,3 @@
+com\ghtkdb\journal\application\repository\JournalEntryRepository.class
+com\ghtkdb\journal\application\entity\JournalEntry.class
+com\ghtkdb\journal\application\controller\JournalController.class

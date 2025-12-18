@@ -1,0 +1,4 @@
+com\ghtkdb\journal\application\controller\impl\HeathCheck.class
+com\ghtkdb\journal\application\service\JournalEntryService.class
+com\ghtkdb\journal\application\controller\impl\JournalControllerImpl.class
+com\ghtkdb\journal\application\service\impl\JournalEntryServiceImpl.class
