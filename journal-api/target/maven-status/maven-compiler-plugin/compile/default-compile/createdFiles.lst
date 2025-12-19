@@ -1,3 +1,6 @@
+com\ghtkdb\journal\application\entity\User.class
 com\ghtkdb\journal\application\repository\JournalEntryRepository.class
+com\ghtkdb\journal\application\repository\UserRepository.class
 com\ghtkdb\journal\application\entity\JournalEntry.class
+com\ghtkdb\journal\application\controller\UserController.class
 com\ghtkdb\journal\application\controller\JournalController.class

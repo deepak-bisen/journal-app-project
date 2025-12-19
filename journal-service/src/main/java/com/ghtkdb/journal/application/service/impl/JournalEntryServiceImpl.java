@@ -41,7 +41,7 @@ public class JournalEntryServiceImpl implements JournalEntryService {
         if (oldEntry != null ){
             oldEntry.setTitle(newEntry.getTitle());
             oldEntry.setContent(newEntry.getTitle());
-            oldEntry.setId(newEntry.getId());
+            oldEntry.setEntryId(newEntry.getEntryId());
             oldEntry.setDate(LocalDateTime.now());
 
             journalEntryRepository.save(oldEntry);

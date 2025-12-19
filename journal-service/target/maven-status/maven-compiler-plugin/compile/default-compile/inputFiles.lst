@@ -1,4 +1,7 @@
 D:\Projects\JournalApp\journal-service\src\main\java\com\ghtkdb\journal\application\controller\impl\HeathCheck.java
 D:\Projects\JournalApp\journal-service\src\main\java\com\ghtkdb\journal\application\controller\impl\JournalControllerImpl.java
+D:\Projects\JournalApp\journal-service\src\main\java\com\ghtkdb\journal\application\controller\impl\UserControllerImpl.java
 D:\Projects\JournalApp\journal-service\src\main\java\com\ghtkdb\journal\application\service\impl\JournalEntryServiceImpl.java
+D:\Projects\JournalApp\journal-service\src\main\java\com\ghtkdb\journal\application\service\impl\UserServiceImpl.java
 D:\Projects\JournalApp\journal-service\src\main\java\com\ghtkdb\journal\application\service\JournalEntryService.java
+D:\Projects\JournalApp\journal-service\src\main\java\com\ghtkdb\journal\application\service\UserService.java

@@ -1,22 +1,26 @@
 package com.ghtkdb.journal.application.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Entity
+@NoArgsConstructor
 public class JournalEntry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
 
-    @Column
-    private Long id;
+    @Column(unique = true)
+    private String entryId;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
     @Column
@@ -24,4 +28,11 @@ public class JournalEntry {
 
     @Column
     private LocalDateTime date;
+
+    // This defines the "many" side of the relationship. Many journalEntries items belong to one USER.
+    // fetch = FetchType.LAZY means this data is only loaded from the DB when it's explicitly asked for
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }

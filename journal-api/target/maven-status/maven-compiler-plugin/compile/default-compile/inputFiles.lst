@@ -1,3 +1,6 @@
 D:\Projects\JournalApp\journal-api\src\main\java\com\ghtkdb\journal\application\controller\JournalController.java
+D:\Projects\JournalApp\journal-api\src\main\java\com\ghtkdb\journal\application\controller\UserController.java
 D:\Projects\JournalApp\journal-api\src\main\java\com\ghtkdb\journal\application\entity\JournalEntry.java
+D:\Projects\JournalApp\journal-api\src\main\java\com\ghtkdb\journal\application\entity\User.java
 D:\Projects\JournalApp\journal-api\src\main\java\com\ghtkdb\journal\application\repository\JournalEntryRepository.java
+D:\Projects\JournalApp\journal-api\src\main\java\com\ghtkdb\journal\application\repository\UserRepository.java
