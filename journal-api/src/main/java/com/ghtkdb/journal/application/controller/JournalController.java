@@ -10,14 +10,14 @@ import java.util.List;
 @RequestMapping("/journal")
 public interface JournalController {
 
-    @GetMapping("/get")
-    ResponseEntity<List<JournalEntry>> getAllEntry();
+    @GetMapping("/get/{userName}")
+    ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String userName);
 
     @GetMapping("/get/{myId}")
     ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String myId);
 
-    @PostMapping("/create")
-    ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry);
+    @PostMapping("/create/{userName}")
+    ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String userName);
 
     @DeleteMapping("delete/{id}")
     ResponseEntity<?> deleteJournalEntryById(@PathVariable String id);

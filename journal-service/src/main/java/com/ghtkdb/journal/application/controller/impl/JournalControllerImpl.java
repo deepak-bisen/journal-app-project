@@ -2,7 +2,9 @@ package com.ghtkdb.journal.application.controller.impl;
 
 import com.ghtkdb.journal.application.controller.JournalController;
 import com.ghtkdb.journal.application.entity.JournalEntry;
+import com.ghtkdb.journal.application.entity.User;
 import com.ghtkdb.journal.application.service.JournalEntryService;
+import com.ghtkdb.journal.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,14 +22,14 @@ public class JournalControllerImpl implements JournalController {
     @Autowired
     private JournalEntryService journalEntryService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
-    public ResponseEntity<List<JournalEntry>> getAllEntry() {
+    public ResponseEntity<?> getAllJournalEntriesOfUser(String userName) {
         try {
-            List<JournalEntry> allEntries = journalEntryService.getAllEntry();
-            if (allEntries != null && !allEntries.isEmpty()) {
-                log.info("getting entries {}", journalEntryService.getAllEntry());
-                return new ResponseEntity<>(allEntries, HttpStatus.OK);
-            }
+            log.info("getting entries of username : {}", userName);
+            return new ResponseEntity<>(journalEntryService.getAllUserEntriesOfUser(userName),HttpStatus.FOUND);
         } catch (Exception e) {
             log.error("some error occurred when getting entries!");
         }
@@ -45,10 +47,11 @@ public class JournalControllerImpl implements JournalController {
     }
 
     @Override
-    public ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry) {
+    public ResponseEntity<JournalEntry> createEntry(JournalEntry myEntry,String userName) {
         try {
-            log.info("saving entry...");
-            journalEntryService.createEntry(myEntry);
+
+            log.info("saving entry of user : {}", userName);
+            journalEntryService.createEntry(myEntry, userName);
             log.info("Entry Saved : {}", myEntry);
             return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
         } catch (Exception e) {
