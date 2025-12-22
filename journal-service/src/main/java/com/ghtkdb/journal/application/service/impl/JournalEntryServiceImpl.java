@@ -30,7 +30,7 @@ public class JournalEntryServiceImpl implements JournalEntryService {
     public JournalEntry createEntry(JournalEntry entry, String userName) {
         User user = userRepository.findByUserName(userName);
         if (user == null) {
-            throw new RuntimeException();
+            throw new RuntimeException("User Not Found");
         }
 
         entry.setUser(user);
@@ -45,7 +45,7 @@ public class JournalEntryServiceImpl implements JournalEntryService {
         User user = userRepository.findByUserName(userName);
         List<JournalEntry> allEntries = user.getJournalEntries();
         if (allEntries != null && !allEntries.isEmpty()) {
-            log.info("getting entries oif username : {}", allEntries);
+            log.info("Getting Entries Of UserName : {}", allEntries);
             return allEntries;
         }
         return null;
@@ -76,10 +76,16 @@ public class JournalEntryServiceImpl implements JournalEntryService {
     public void deleteJournalEntryById(String uuid, String userName) {
         User user = userRepository.findByUserName(userName);
         if (user == null) {
-            throw new RuntimeException();
+            throw new RuntimeException("User Not Found");
         }
-        user.getJournalEntries().removeIf(x -> x.getEntryId().equals(uuid));
-        userService.createUser(user);
-        journalEntryRepository.deleteById(uuid);
+
+        boolean removed = user.getJournalEntries().removeIf(x -> x.getUuid().equals(uuid));
+        if (removed) {
+            //  Save the user. Because of orphanRemoval=true, JPA will delete the entry from the DB.
+            userRepository.save(user);
+        } else {
+            log.error("Entry with uuid {} not found for user {}", uuid, userName);
+            throw new RuntimeException("Entry not found in user's collection");
+        }
     }
 }
