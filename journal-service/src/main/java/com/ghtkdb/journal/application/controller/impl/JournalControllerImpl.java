@@ -2,7 +2,6 @@ package com.ghtkdb.journal.application.controller.impl;
 
 import com.ghtkdb.journal.application.controller.JournalController;
 import com.ghtkdb.journal.application.entity.JournalEntry;
-import com.ghtkdb.journal.application.entity.User;
 import com.ghtkdb.journal.application.service.JournalEntryService;
 import com.ghtkdb.journal.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,9 +46,8 @@ public class JournalControllerImpl implements JournalController {
     }
 
     @Override
-    public ResponseEntity<JournalEntry> createEntry(JournalEntry myEntry,String userName) {
+    public ResponseEntity<JournalEntry> createEntry( JournalEntry myEntry, String userName) {
         try {
-
             log.info("saving entry of user : {}", userName);
             journalEntryService.createEntry(myEntry, userName);
             log.info("Entry Saved : {}", myEntry);
@@ -62,9 +60,9 @@ public class JournalControllerImpl implements JournalController {
     }
 
     @Override
-    public ResponseEntity<?> deleteJournalEntryById(@PathVariable String id) {
+    public ResponseEntity<?> deleteJournalEntryById(String id, String userName) {
         try {
-            journalEntryService.deleteJournalEntryById(id);
+            journalEntryService.deleteJournalEntryById(id, userName);
             log.info("Entry Deleted Using Given Id : {}", id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
@@ -75,7 +73,7 @@ public class JournalControllerImpl implements JournalController {
     }
 
     @Override
-    public ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String id, @RequestBody JournalEntry myEntry) {
+    public ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String id, @RequestBody JournalEntry myEntry,String userName) {
         try {
             log.info("updating entry for given id : {}", id);
             log.info("updated entry : {}", myEntry);

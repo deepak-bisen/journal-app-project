@@ -14,5 +14,5 @@ public interface JournalEntryService {
     public List<JournalEntry> getAllUserEntriesOfUser(String userName);
     public Optional<JournalEntry> getJournalEntryById(String uuid);
     public JournalEntry updateJournalEntryById(String id, JournalEntry myEntry);
-    public void deleteJournalEntryById(String uuid);
+    public void deleteJournalEntryById(String uuid, String username);
 }

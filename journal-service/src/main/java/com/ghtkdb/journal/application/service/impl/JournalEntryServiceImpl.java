@@ -8,12 +8,8 @@ import com.ghtkdb.journal.application.service.JournalEntryService;
 import com.ghtkdb.journal.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +29,16 @@ public class JournalEntryServiceImpl implements JournalEntryService {
     @Override
     public JournalEntry createEntry(JournalEntry entry, String userName) {
         User user = userRepository.findByUserName(userName);
-        entry.setDate(LocalDateTime.now());
+        if (user == null) {
+            throw new RuntimeException();
+        }
+
+        entry.setUser(user);
         JournalEntry saved = journalEntryRepository.save(entry);
         user.getJournalEntries().add(saved);
-        userService.createUser(user);
         return entry;
     }
+
 
     @Override
     public List<JournalEntry> getAllUserEntriesOfUser(String userName) {
@@ -65,7 +65,6 @@ public class JournalEntryServiceImpl implements JournalEntryService {
             oldEntry.setTitle(newEntry.getTitle());
             oldEntry.setContent(newEntry.getTitle());
             oldEntry.setEntryId(newEntry.getEntryId());
-            oldEntry.setDate(LocalDateTime.now());
 
             journalEntryRepository.save(oldEntry);
         }
@@ -74,7 +73,13 @@ public class JournalEntryServiceImpl implements JournalEntryService {
     }
 
     @Override
-    public void deleteJournalEntryById(String uuid) {
+    public void deleteJournalEntryById(String uuid, String userName) {
+        User user = userRepository.findByUserName(userName);
+        if (user == null) {
+            throw new RuntimeException();
+        }
+        user.getJournalEntries().removeIf(x -> x.getEntryId().equals(uuid));
+        userService.createUser(user);
         journalEntryRepository.deleteById(uuid);
     }
 }

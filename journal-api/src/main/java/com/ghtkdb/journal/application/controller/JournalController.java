@@ -10,7 +10,7 @@ import java.util.List;
 @RequestMapping("/journal")
 public interface JournalController {
 
-    @GetMapping("/get/{userName}")
+    @GetMapping("/getAll/{userName}")
     ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String userName);
 
     @GetMapping("/get/{myId}")
@@ -19,9 +19,9 @@ public interface JournalController {
     @PostMapping("/create/{userName}")
     ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String userName);
 
-    @DeleteMapping("delete/{id}")
-    ResponseEntity<?> deleteJournalEntryById(@PathVariable String id);
+    @DeleteMapping("delete/{userName}/{id}")
+    ResponseEntity<?> deleteJournalEntryById(@PathVariable String id,@PathVariable String userName);
 
-    @PutMapping("update/{id}")
-    ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String id,@RequestBody JournalEntry myEntry);
+    @PutMapping("update/{userName}/{id}")
+    ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String id,@RequestBody JournalEntry myEntry,@PathVariable String userName);
 }

@@ -28,6 +28,7 @@ public class User {
     // This is a relationship to journalEntries within the SAME service's database.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @Column
     private List<JournalEntry> journalEntries = new ArrayList<>();
 
 
