@@ -37,49 +37,34 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<User> getUserById(@PathVariable String userId) {
-        Optional<User> user = userService.getUserById(userId);
+    public ResponseEntity<User> getUserById(@PathVariable String uuid) {
+        Optional<User> user = userService.getUserById(uuid);
         if (user.isPresent()) {
             return new ResponseEntity<>(user.get(), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @Override
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        try {
-            log.info("saving user...");
-            userService.createUser(user);
-            log.info("User Saved : {}", user);
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
-        } catch (Exception e) {
-            log.error("Can't create user : {}", user);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-    }
 
     @Override
-    public ResponseEntity<?> deleteUserByUserName(@PathVariable String userName) {
+    public ResponseEntity<?> deleteUser() {
         try {
-            userService.deleteUserByUserName(userName);
-            log.info("User Deleted Using Given userName : {}", userName);
+            userService.deleteUserByUserName();
+            log.info("User Deleted.");
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            log.error("Can't delete user! by given userName : {}", userName);
+            log.error("Can't delete user!");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @Override
-    public ResponseEntity<User> updateUserById(@PathVariable String id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
         try {
-            log.info("updating user for given id : {}", id);
-            log.info("updated user : {}", user);
-            return new ResponseEntity<>(userService.updateUserById(id, user), HttpStatus.OK);
+            log.info("user updated..");
+            return new ResponseEntity<>(userService.updateUserById(user), HttpStatus.OK);
         } catch (Exception e) {
-            log.error("entry not found! for given id : {}", id);
+            log.error("entry not found! to delete");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

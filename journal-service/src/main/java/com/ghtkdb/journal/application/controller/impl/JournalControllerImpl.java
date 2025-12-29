@@ -24,32 +24,42 @@ public class JournalControllerImpl implements JournalController {
     @Autowired
     private UserService userService;
 
+
     @Override
-    public ResponseEntity<?> getAllJournalEntriesOfUser(String userName) {
+    public ResponseEntity<?> getAllJournalEntriesOfUser() {
         try {
-            log.info("getting entries of username : {}", userName);
-            return new ResponseEntity<>(journalEntryService.getAllUserEntriesOfUser(userName),HttpStatus.FOUND);
+            log.info("getting entries of user.");
+            return new ResponseEntity<>(journalEntryService.getAllUserEntriesOfUser(), HttpStatus.FOUND);
         } catch (Exception e) {
             log.error("some error occurred when getting entries!");
+            log.info("Exception : {}", e);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
-    @Override
-    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String myId) {
-        Optional<JournalEntry> journalEntry = journalEntryService.getJournalEntryById(myId);
-        if (journalEntry.isPresent()) {
-            return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 
     @Override
-    public ResponseEntity<JournalEntry> createEntry( JournalEntry myEntry, String userName) {
+    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String uuid) {
+        log.info("getting entries by id....");
         try {
-            log.info("saving entry of user : {}", userName);
-            journalEntryService.createEntry(myEntry, userName);
+            Optional<JournalEntry> journalEntry = journalEntryService.getJournalEntryById(uuid);
+            if (journalEntry.isPresent()) {
+                return new ResponseEntity<>(journalEntry.get(), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            log.error("some error occurred : {}", e);
+
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<JournalEntry> createEntry(JournalEntry myEntry) {
+
+        try {
+            log.info("saving entry of user...");
+            journalEntryService.createEntry(myEntry);
             log.info("Entry Saved : {}", myEntry);
             return new ResponseEntity<>(myEntry, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -60,26 +70,26 @@ public class JournalControllerImpl implements JournalController {
     }
 
     @Override
-    public ResponseEntity<?> deleteJournalEntryById(String id, String userName) {
+    public ResponseEntity<?> deleteJournalEntryById(String uuid, String userName) {
         try {
-            journalEntryService.deleteJournalEntryById(id, userName);
-            log.info("Entry Deleted Using Given Id : {}", id);
+            journalEntryService.deleteJournalEntryById(uuid, userName);
+            log.info("Entry Deleted Using Given Id : {}", uuid);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
-            log.error("Can't delete! by given Id : {}", id);
+            log.error("Can't delete! by given Id : {}", uuid);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @Override
-    public ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String id, @RequestBody JournalEntry myEntry,String userName) {
+    public ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String uuid, @RequestBody JournalEntry myEntry, String userName) {
         try {
-            log.info("updating entry for given id : {}", id);
+            log.info("updating entry for given id : {}", uuid);
             log.info("updated entry : {}", myEntry);
-            return new ResponseEntity<>(journalEntryService.updateJournalEntryById(id, myEntry), HttpStatus.OK);
+            return new ResponseEntity<>(journalEntryService.updateJournalEntryById(uuid, myEntry), HttpStatus.OK);
         } catch (Exception e) {
-            log.error("entry not found! for given id : {}", id);
+            log.error("entry not found! for given id : {}", uuid);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

@@ -6,22 +6,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequestMapping("/journal")
 public interface JournalController {
 
-    @GetMapping("/getAll/{userName}")
-    ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String userName);
+    @GetMapping("/getAll")
+    ResponseEntity<?> getAllJournalEntriesOfUser();
 
-    @GetMapping("/get/{myId}")
-    ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String myId);
+    @GetMapping("/get/{id}")
+    ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String uuid);
 
-    @PostMapping("/create/{userName}")
-    ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry, @PathVariable String userName);
+    @PostMapping("/create")
+    ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry);
 
-    @DeleteMapping("delete/{userName}/{id}")
-    ResponseEntity<?> deleteJournalEntryById(@PathVariable String id,@PathVariable String userName);
+    @DeleteMapping("delete/{username}/{id}")
+    ResponseEntity<?> deleteJournalEntryById(@PathVariable String uuid,@PathVariable String username);
 
-    @PutMapping("update/{userName}/{id}")
-    ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String id,@RequestBody JournalEntry myEntry,@PathVariable String userName);
+    @PutMapping("update/{username}/{id}")
+    ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String uuid,@RequestBody JournalEntry myEntry,@PathVariable String username);
 }

@@ -8,7 +8,10 @@ import com.ghtkdb.journal.application.service.JournalEntryService;
 import com.ghtkdb.journal.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +30,10 @@ public class JournalEntryServiceImpl implements JournalEntryService {
     private UserService userService;
 
     @Override
-    public JournalEntry createEntry(JournalEntry entry, String userName) {
+    @Transactional
+    public JournalEntry createEntry(JournalEntry entry) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
         User user = userRepository.findByUserName(userName);
         if (user == null) {
             throw new RuntimeException("User Not Found");
@@ -41,7 +47,10 @@ public class JournalEntryServiceImpl implements JournalEntryService {
 
 
     @Override
-    public List<JournalEntry> getAllUserEntriesOfUser(String userName) {
+    public List<JournalEntry> getAllUserEntriesOfUser() {
+        log.info("inside @class JournalEntryServiceImpl inside @method getAllUserEntriesOfUser ");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
         User user = userRepository.findByUserName(userName);
         List<JournalEntry> allEntries = user.getJournalEntries();
         if (allEntries != null && !allEntries.isEmpty()) {
@@ -53,32 +62,52 @@ public class JournalEntryServiceImpl implements JournalEntryService {
 
     @Override
     public Optional<JournalEntry> getJournalEntryById(String uuid) {
-        return journalEntryRepository.findById(uuid);
+        log.info("inside getJournalEntryById for uuid: {}", uuid);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByUserName(username);
+
+        // 1. Null check for user
+        if (user == null) {
+            log.warn("User {} not found", username);
+            return Optional.empty();
+        }
+
+        // 2. Check if the entry belongs to this user
+        boolean ownsEntry = user.getJournalEntries().stream()
+                .anyMatch(x -> x.getUuid().equals(uuid));
+
+        if (ownsEntry) {
+            return journalEntryRepository.findById(uuid);
+        }
+
+        log.warn("User {} does not own entry {}", username, uuid);
+        return Optional.empty(); // Never return null for an Optional
     }
 
     @Override
     public JournalEntry updateJournalEntryById(String uuid, JournalEntry newEntry) {
-
+        log.info("inside @class JournalEntryServiceImpl inside @method updateJournalEntryById ");
         JournalEntry oldEntry = journalEntryRepository.findById(uuid).orElseThrow(null);
 
         if (oldEntry != null) {
             oldEntry.setTitle(newEntry.getTitle());
             oldEntry.setContent(newEntry.getTitle());
-            oldEntry.setEntryId(newEntry.getEntryId());
-
+            oldEntry.setUuid(newEntry.getUuid());
             journalEntryRepository.save(oldEntry);
         }
-
         return oldEntry;
     }
 
     @Override
     public void deleteJournalEntryById(String uuid, String userName) {
+        log.info("inside @class JournalEntryServiceImpl inside @method deleteJournalEntryById ");
         User user = userRepository.findByUserName(userName);
         if (user == null) {
             throw new RuntimeException("User Not Found");
         }
-
         boolean removed = user.getJournalEntries().removeIf(x -> x.getUuid().equals(uuid));
         if (removed) {
             //  Save the user. Because of orphanRemoval=true, JPA will delete the entry from the DB.

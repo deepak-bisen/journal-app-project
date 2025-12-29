@@ -3,6 +3,7 @@ package com.ghtkdb.journal.application.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
 
-    @Column(unique = true)
-    private String userId;
+    @Column(unique = true, nullable = false)
+    private Long userId;
 
     @Column(nullable = false, unique = true)
     private String userName;
@@ -25,11 +26,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private List<String> roles;
+
     // This is a relationship to journalEntries within the SAME service's database.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    @Column
     private List<JournalEntry> journalEntries = new ArrayList<>();
-
 
 }

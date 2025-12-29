@@ -1,13 +1,16 @@
 package com.ghtkdb.journal.application.service.impl;
 
-import com.ghtkdb.journal.application.entity.JournalEntry;
 import com.ghtkdb.journal.application.repository.UserRepository;
 import com.ghtkdb.journal.application.service.UserService;
 import com.ghtkdb.journal.application.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +20,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @Override
-    public User createUser(User user) {
+    public User createNewUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER"));
         userRepository.save(user);
         return user;
+    }
+
+    public User createUser(User user){
+        return userRepository.save(user);
     }
 
     @Override
@@ -34,21 +45,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserById(String uuid, User newUser) {
+    public User updateUserById(User newUser) {
 
-        User oldUser = userRepository.findById(uuid).orElseThrow(null);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
 
-        if (oldUser != null ){
-            oldUser.setUserName(newUser.getUserName());
-            oldUser.setPassword(newUser.getPassword());
-            userRepository.save(oldUser);
-        }
+        User userInDB = userRepository.findByUserName(userName);
+        userInDB.setUserName(newUser.getUserName());
+        userInDB.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userRepository.save(userInDB);
 
-        return oldUser;
+        return userInDB;
     }
 
     @Override
-    public void deleteUserByUserName(String userName) {
-         userRepository.deleteUserByUserName(userName);
+    public void deleteUserByUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         userRepository.deleteUserByUserName(authentication.getName());
     }
 }

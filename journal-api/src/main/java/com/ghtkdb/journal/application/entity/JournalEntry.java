@@ -18,9 +18,6 @@ public class JournalEntry {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
 
-    @Column(unique = true)
-    private String entryId;
-
     @Column(nullable = false)
     private String title;
 

@@ -6,22 +6,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/user")
+@RequestMapping("user")
 public interface UserController {
 
     @GetMapping("/get")
     ResponseEntity<List<User>> getAllUsers();
 
     @GetMapping("/get/{userId}")
-    ResponseEntity<User> getUserById(@PathVariable String userId);
+    ResponseEntity<User> getUserById(@PathVariable String uuid);
 
-    @PostMapping("/create")
-    ResponseEntity<User> createUser(@RequestBody User user);
+    @DeleteMapping("/delete")
+    ResponseEntity<?> deleteUser();
 
-    @DeleteMapping("delete/{userName}")
-    ResponseEntity<?> deleteUserByUserName(@PathVariable String userName);
-
-    @PutMapping("update/{userId}")
-    ResponseEntity<User> updateUserById(@PathVariable String userId, @RequestBody User user);
+    @PutMapping("/update")
+    ResponseEntity<User> updateUser(@RequestBody User user);
 }
