@@ -88,22 +88,10 @@ public class JournalEntryServiceImpl implements JournalEntryService {
     }
 
     @Override
-    public JournalEntry updateJournalEntryById(String uuid, JournalEntry newEntry) {
-        log.info("inside @class JournalEntryServiceImpl inside @method updateJournalEntryById ");
-        JournalEntry oldEntry = journalEntryRepository.findById(uuid).orElseThrow(null);
-
-        if (oldEntry != null) {
-            oldEntry.setTitle(newEntry.getTitle());
-            oldEntry.setContent(newEntry.getTitle());
-            oldEntry.setUuid(newEntry.getUuid());
-            journalEntryRepository.save(oldEntry);
-        }
-        return oldEntry;
-    }
-
-    @Override
-    public void deleteJournalEntryById(String uuid, String userName) {
+    public void deleteJournalEntryById(String uuid) {
         log.info("inside @class JournalEntryServiceImpl inside @method deleteJournalEntryById ");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
         User user = userRepository.findByUserName(userName);
         if (user == null) {
             throw new RuntimeException("User Not Found");
@@ -116,5 +104,32 @@ public class JournalEntryServiceImpl implements JournalEntryService {
             log.error("Entry with uuid {} not found for user {}", uuid, userName);
             throw new RuntimeException("Entry not found in user's collection");
         }
+    }
+
+    @Override
+    @Transactional
+    public JournalEntry updateJournalEntryById(String uuid, JournalEntry newEntry) {
+
+        log.info("inside @class JournalEntryServiceImpl inside @method updateJournalEntryById ");
+        // Get the username from the Security Context
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Verify the user exists
+        User user = userRepository.findByUserName(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        // Fetch the existing entry and verify ownership
+        JournalEntry oldEntry = journalEntryRepository.findById(uuid)
+                .filter(entry -> entry.getUser().getUserName().equals(username))
+                .orElseThrow(() -> new RuntimeException("Entry not found or access denied"));
+
+        // Update fields
+        if (newEntry.getTitle() != null) oldEntry.setTitle(newEntry.getTitle());
+        if (newEntry.getContent() != null) oldEntry.setContent(newEntry.getContent());
+
+        return journalEntryRepository.save(oldEntry);
     }
 }

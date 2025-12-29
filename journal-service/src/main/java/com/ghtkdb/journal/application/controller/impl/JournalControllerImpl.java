@@ -70,26 +70,28 @@ public class JournalControllerImpl implements JournalController {
     }
 
     @Override
-    public ResponseEntity<?> deleteJournalEntryById(String uuid, String userName) {
+    public ResponseEntity<?> deleteJournalEntryById(String uuid) {
         try {
-            journalEntryService.deleteJournalEntryById(uuid, userName);
+            journalEntryService.deleteJournalEntryById(uuid);
             log.info("Entry Deleted Using Given Id : {}", uuid);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             log.error("Can't delete! by given Id : {}", uuid);
+            log.error("error occurred : {}", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @Override
-    public ResponseEntity<JournalEntry> updateJournalEntryById(String uuid, JournalEntry myEntry, String userName) {
+    public ResponseEntity<JournalEntry> updateJournalEntryById(String uuid, JournalEntry myEntry) {
         try {
-            log.info("updating entry for given id : {}", uuid);
+            log.info("Updating journal entry for id: {}", uuid);
+            JournalEntry updatedEntry = journalEntryService.updateJournalEntryById(uuid, myEntry);
             log.info("updated entry : {}", myEntry);
-            return new ResponseEntity<>(journalEntryService.updateJournalEntryById(uuid, myEntry), HttpStatus.OK);
+            return new ResponseEntity<>(updatedEntry, HttpStatus.OK);
         } catch (Exception e) {
-            log.error("entry not found! for given id : {}", uuid);
+            log.error("Update failed: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

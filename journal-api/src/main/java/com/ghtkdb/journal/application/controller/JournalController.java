@@ -18,9 +18,9 @@ public interface JournalController {
     @PostMapping("/create")
     ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry);
 
-    @DeleteMapping("delete/{username}/{uuid}")
-    ResponseEntity<?> deleteJournalEntryById(@PathVariable String uuid,@PathVariable String username);
+    @DeleteMapping("delete/{uuid}")
+    ResponseEntity<?> deleteJournalEntryById(@PathVariable String uuid);
 
-    @PutMapping("update/{username}/{uuid}")
-    ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String uuid,@RequestBody JournalEntry myEntry,@PathVariable String username);
+    @PutMapping("update/{uuid}")
+    ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String uuid,@RequestBody JournalEntry myEntry);
 }
