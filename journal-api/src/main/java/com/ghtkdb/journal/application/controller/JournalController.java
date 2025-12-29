@@ -12,15 +12,15 @@ public interface JournalController {
     @GetMapping("/getAll")
     ResponseEntity<?> getAllJournalEntriesOfUser();
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/get/{uuid}")
     ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String uuid);
 
     @PostMapping("/create")
     ResponseEntity<JournalEntry> createEntry(@RequestBody JournalEntry myEntry);
 
-    @DeleteMapping("delete/{username}/{id}")
+    @DeleteMapping("delete/{username}/{uuid}")
     ResponseEntity<?> deleteJournalEntryById(@PathVariable String uuid,@PathVariable String username);
 
-    @PutMapping("update/{username}/{id}")
+    @PutMapping("update/{username}/{uuid}")
     ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String uuid,@RequestBody JournalEntry myEntry,@PathVariable String username);
 }

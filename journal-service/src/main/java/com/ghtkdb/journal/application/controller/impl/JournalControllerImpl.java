@@ -83,7 +83,7 @@ public class JournalControllerImpl implements JournalController {
     }
 
     @Override
-    public ResponseEntity<JournalEntry> updateJournalEntryById(@PathVariable String uuid, @RequestBody JournalEntry myEntry, String userName) {
+    public ResponseEntity<JournalEntry> updateJournalEntryById(String uuid, JournalEntry myEntry, String userName) {
         try {
             log.info("updating entry for given id : {}", uuid);
             log.info("updated entry : {}", myEntry);

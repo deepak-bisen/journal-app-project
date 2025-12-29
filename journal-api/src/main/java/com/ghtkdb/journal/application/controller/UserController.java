@@ -12,7 +12,7 @@ public interface UserController {
     @GetMapping("/get")
     ResponseEntity<List<User>> getAllUsers();
 
-    @GetMapping("/get/{userId}")
+    @GetMapping("/get/{uuid}")
     ResponseEntity<User> getUserById(@PathVariable String uuid);
 
     @DeleteMapping("/delete")

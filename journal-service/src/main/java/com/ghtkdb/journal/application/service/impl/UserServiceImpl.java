@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
