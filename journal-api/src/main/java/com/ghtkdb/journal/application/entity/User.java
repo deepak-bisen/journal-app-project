@@ -26,7 +26,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private List<String> roles;
+    private String role;
 
     // This is a relationship to journalEntries within the SAME service's database.
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

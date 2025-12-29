@@ -25,7 +25,6 @@ public class PublicControllerImpl implements PublicController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
             log.info("inside @class PublicControllerImpl in @method createUser saving user...");
-//            userService.createUser(user);
             userService.createNewUser(user);
             log.info("User Saved : {}", user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);

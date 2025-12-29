@@ -11,9 +11,16 @@ import java.util.Optional;
 public interface UserService {
 
     public User createUser(User user);
+
     public User createNewUser(User user);
+
+    public User createNewAdmin(User user);
+
     public List<User> getAllUsers();
+
     public Optional<User> getUserById(String uuid);
+
     public User updateUserById(User user);
+
     public void deleteUserByUserName();
 }
