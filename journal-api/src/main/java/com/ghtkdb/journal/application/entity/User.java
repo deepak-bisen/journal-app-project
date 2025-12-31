@@ -23,6 +23,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String userName;
 
+    @Column
+    private String email;
+
+    @Column
+    private boolean sentimentAnalysis;
+
     @Column(nullable = false)
     private String password;
 

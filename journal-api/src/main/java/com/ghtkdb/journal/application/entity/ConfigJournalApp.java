@@ -14,9 +14,9 @@ public class ConfigJournalApp {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String uuid;
 
-    @Column(name = "KEYS", nullable = false)
-    private  String keys;
+    @Column(name = "CONFIG_KEY", nullable = false)
+    private  String key;
 
-    @Column(name = "VALUE", nullable = false)
+    @Column(name = "CONFIG_VALUE", nullable = false)
     private  String value;
 }
