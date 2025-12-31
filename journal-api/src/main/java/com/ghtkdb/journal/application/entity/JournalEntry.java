@@ -1,6 +1,7 @@
 package com.ghtkdb.journal.application.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ghtkdb.journal.application.enums.Sentiment;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,9 @@ public class JournalEntry {
 
     @Column
     private LocalDateTime date = LocalDateTime.now();
+
+    @Column
+    private Sentiment sentiment;
 
     // This defines the "many" side of the relationship. Many journalEntries items belong to one USER.
     // fetch = FetchType.LAZY means this data is only loaded from the DB when it's explicitly asked for

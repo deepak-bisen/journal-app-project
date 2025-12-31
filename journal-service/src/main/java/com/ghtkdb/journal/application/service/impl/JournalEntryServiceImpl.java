@@ -129,6 +129,7 @@ public class JournalEntryServiceImpl implements JournalEntryService {
         // Update fields
         if (newEntry.getTitle() != null) oldEntry.setTitle(newEntry.getTitle());
         if (newEntry.getContent() != null) oldEntry.setContent(newEntry.getContent());
+        if (newEntry.getSentiment() !=null) oldEntry.setSentiment(newEntry.getSentiment());
 
         return journalEntryRepository.save(oldEntry);
     }
