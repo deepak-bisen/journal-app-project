@@ -27,7 +27,7 @@ public class AppCache {
         appCache = new HashMap<>();
         List<ConfigJournalApp> all = configJournalAppRepository.findAll();
         for (ConfigJournalApp configJournalApp : all) {
-            appCache.put(configJournalApp.getKey(), configJournalApp.getValue());
+            appCache.put(configJournalApp.getKeys(), configJournalApp.getValue());
         }
     }
 
