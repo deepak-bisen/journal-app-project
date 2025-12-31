@@ -12,6 +12,9 @@ public interface UserController {
     @GetMapping("/get")
     ResponseEntity<List<User>> getAllUsers();
 
+    @GetMapping("/greeting")
+    ResponseEntity<?> greeting();
+
     @GetMapping("/get/{uuid}")
     ResponseEntity<User> getUserById(@PathVariable String uuid);
 

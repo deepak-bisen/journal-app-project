@@ -1,5 +1,6 @@
 package com.ghtkdb.journal.application.controller.impl;
 
+import com.ghtkdb.journal.application.cache.AppCache;
 import com.ghtkdb.journal.application.controller.AdminController;
 import com.ghtkdb.journal.application.entity.User;
 import com.ghtkdb.journal.application.service.UserService;
@@ -14,8 +15,12 @@ import java.util.List;
 @RestController
 @Slf4j
 public class AdminControllerImpl implements AdminController {
+
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AppCache appCache;
 
     @Override
     public ResponseEntity<List<User>> getAllUsers() {
@@ -32,13 +37,18 @@ public class AdminControllerImpl implements AdminController {
     }
 
     @Override
-    public ResponseEntity<User> createNewAdmin(User user){
-        try{
+    public ResponseEntity<User> createNewAdmin(User user) {
+        try {
             log.info("creating admin..");
-            return new ResponseEntity<>(userService.createNewAdmin(user),HttpStatus.CREATED);
-        }catch (Exception e){
+            return new ResponseEntity<>(userService.createNewAdmin(user), HttpStatus.CREATED);
+        } catch (Exception e) {
             log.error("can't create admin! {}", e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public void clearAppCache() {
+        appCache.init();
     }
 }

@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
-@Slf4j
+
 @RestController
+@Slf4j
 public class JournalControllerImpl implements JournalController {
 
     @Autowired
@@ -28,6 +28,7 @@ public class JournalControllerImpl implements JournalController {
     @Override
     public ResponseEntity<?> getAllJournalEntriesOfUser() {
         try {
+            log.info("inside @class JournalControllerImpl in @method getAllJournalEntriesOfUser");
             log.info("getting entries of user.");
             return new ResponseEntity<>(journalEntryService.getAllUserEntriesOfUser(), HttpStatus.FOUND);
         } catch (Exception e) {
@@ -41,6 +42,8 @@ public class JournalControllerImpl implements JournalController {
 
     @Override
     public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String uuid) {
+        log.info("inside @class JournalControllerImpl in @method getAllJournalEntryById");
+
         log.info("getting entries by id....");
         try {
             Optional<JournalEntry> journalEntry = journalEntryService.getJournalEntryById(uuid);
@@ -56,6 +59,7 @@ public class JournalControllerImpl implements JournalController {
 
     @Override
     public ResponseEntity<JournalEntry> createEntry(JournalEntry myEntry) {
+        log.info("inside @class JournalControllerImpl in @method createEntry");
 
         try {
             log.info("saving entry of user...");
@@ -71,6 +75,8 @@ public class JournalControllerImpl implements JournalController {
 
     @Override
     public ResponseEntity<?> deleteJournalEntryById(String uuid) {
+        log.info("inside @class JournalControllerImpl in @method deleteJournalEntryById");
+
         try {
             journalEntryService.deleteJournalEntryById(uuid);
             log.info("Entry Deleted Using Given Id : {}", uuid);
@@ -85,6 +91,8 @@ public class JournalControllerImpl implements JournalController {
 
     @Override
     public ResponseEntity<JournalEntry> updateJournalEntryById(String uuid, JournalEntry myEntry) {
+        log.info("inside @class JournalControllerImpl in @method updateJournalEntryById");
+
         try {
             log.info("Updating journal entry for id: {}", uuid);
             JournalEntry updatedEntry = journalEntryService.updateJournalEntryById(uuid, myEntry);

@@ -16,4 +16,7 @@ public interface AdminController {
 
     @PostMapping("/create-admin-user")
     ResponseEntity<User> createNewAdmin(@RequestBody User user);
+
+    @GetMapping("/clear-app-cache")
+    public void clearAppCache();
 }
