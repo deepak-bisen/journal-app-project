@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#0f172a]">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenJournal | Your Mind, Organized</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+</head>
+
+<body class="min-h-screen bg-[#0f172a] text-[#f1f5f9] font-['Inter'] transition-all duration-300">
+
+    <nav class="sticky top-0 z-50 glass-card py-4 px-6 mb-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2 cursor-pointer" onclick="router.home()">
+                <div class="bg-indigo-600 p-2 rounded-lg shadow-lg shadow-indigo-500/20">
+                    <i class="fas fa-book-open text-white"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight">ZenJournal</span>
+            </div>
+            <!-- Navigation Actions including Home and Admin buttons -->
+            <div id="nav-actions" class="flex items-center space-x-2"></div>
+        </div>
+    </nav>
+
+    <main id="app-root" class="max-w-7xl mx-auto px-6 pb-12"></main>
+
+    <div id="modal-container"
+        class="fixed inset-0 z-[60] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div id="modal-content" class="glass-card w-full max-w-lg rounded-2xl p-8 animate-fade-in shadow-2xl"></div>
+    </div>
+
+    <div id="toast" class="fixed bottom-8 right-8 z-[100] hidden translate-y-20 transition-all duration-300">
+        <div
+            class="glass-card px-6 py-4 rounded-xl flex items-center space-x-3 shadow-2xl border-l-4 border-indigo-500 bg-slate-900">
+            <i id="toast-icon" class="fas fa-info-circle"></i>
+            <p id="toast-message" class="font-medium text-sm"></p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+#Ignore general log files
+.log
+npm-debug.log
+yarn-debug.log*
+yarn-error.log*
+
+#Ignore IDE files
+#IntelliJ
+.idea/
+*.iml
+*.iws
+
+#VS Code
+.vscode/
+
+#Ignore Java build files
+#This path targets the Maven parent project and all its sub-modules
+JournalApp/target/JournalApp//target/JournalApp//.mvn/
+
+#Ignore compiled class files
+*.class
+
+#Ignore package files
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+#Ignore virtual machine crash logs
+hs_err_pid*
+
+#Ignore operating system files
+.DS_Store
+Thumbs.db
