@@ -44,7 +44,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         // Allow your specific frontend origin
-        configuration.setAllowedOrigins(Arrays.asList("[https://zen-zournal.netlify.app](https://zen-zournal.netlify.app)", "http://localhost:5500"));
+        configuration.setAllowedOrigins(Arrays.asList("https://zen-zournal.netlify.app", "http://localhost:5500"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         configuration.setAllowCredentials(true);
