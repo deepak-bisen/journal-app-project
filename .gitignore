@@ -13,8 +13,13 @@ yarn-error.log*
 #VS Code
 .vscode/
 
-#Ignore Java build files
 #This path targets the Maven parent project and all its sub-modules
+# Ignore build and distribution folders
+JournalApp-Backend/target/
+journal_App_Frontend/dist/
+journal_App_Frontend/build/
+
+#Ignore Java build files
 JournalApp/target/JournalApp//target/JournalApp//.mvn/
 
 #Ignore compiled class files
@@ -34,3 +39,12 @@ hs_err_pid*
 #Ignore operating system files
 .DS_Store
 Thumbs.db
+
+# Ignore dependency folders
+node_modules/
+bin/
+
+# Ignore Maven Wrapper (optional, but keeps repo clean)
+.mvn/
+mvnw
+mvnw.cmd
