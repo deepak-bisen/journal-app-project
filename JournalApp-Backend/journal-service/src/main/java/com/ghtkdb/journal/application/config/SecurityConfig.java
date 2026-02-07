@@ -26,30 +26,36 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
-                .cors(Customizer.withDefaults()) // Enable CORS support in Spring Security
-                .authorizeHttpRequests(request -> request
-                .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/journal/**", "/user/**").authenticated()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-
-                .httpBasic(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Explicitly point to the source
                 .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 1. Allow all preflight requests
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/journal/**", "/user/**").authenticated()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
 
-    @Bean
+  @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Allow your specific frontend origin
-        configuration.setAllowedOrigins(Arrays.asList("https://zen-zournal.netlify.app/", "http://localhost:5500"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        
+        // 2. Use Origin Patterns and ensure matching with the browser origin
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+            "https://zen-zournal.netlify.app",
+            "http://localhost:*",
+            "http://127.0.0.1:*"
+        ));
+        
+        // 3. Broaden allowed methods and headers to prevent preflight rejection
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
+        configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers for maximum compatibility
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L); // Cache preflight response for 1 hour
-
+        
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
