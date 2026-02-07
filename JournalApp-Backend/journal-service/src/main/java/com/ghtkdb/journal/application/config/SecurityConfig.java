@@ -3,6 +3,7 @@ package com.ghtkdb.journal.application.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod; // <--- CRITICAL: This line must be present
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,13 +25,16 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
-     @Bean
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Explicitly point to the source
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Now HttpMethod is recognized
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // HttpMethod enum is used here
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/journal/**", "/user/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -39,22 +43,21 @@ public class SecurityConfig {
                 .build();
     }
 
-  @Bean
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // 2. Use Origin Patterns and ensure matching with the browser origin
+        // Allowed Origin Patterns for flexibility
         configuration.setAllowedOriginPatterns(Arrays.asList(
             "https://zen-zournal.netlify.app",
             "http://localhost:*",
             "http://127.0.0.1:*"
         ));
         
-        // 3. Broaden allowed methods and headers to prevent preflight rejection
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
-        configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers for maximum compatibility
+        configuration.setAllowedHeaders(Arrays.asList("*")); 
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L); // Cache preflight response for 1 hour
+        configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -62,12 +65,7 @@ public class SecurityConfig {
     }
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Injected from the new PasswordConfig
-
-    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
-
-
 }
