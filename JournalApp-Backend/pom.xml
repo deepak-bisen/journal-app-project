@@ -80,4 +80,14 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<!-- Added production profile to resolve Railway build warnings -->
+    <profiles>
+        <profile>
+            <id>production</id>
+            <properties>
+                <activatedProperties>prod</activatedProperties>
+            </properties>
+        </profile>
+    </profiles>
 </project>
