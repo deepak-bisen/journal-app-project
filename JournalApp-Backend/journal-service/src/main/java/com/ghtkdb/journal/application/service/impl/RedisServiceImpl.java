@@ -15,17 +15,20 @@ import java.util.concurrent.TimeUnit;
 public class RedisServiceImpl implements RedisService {
 
     @Autowired
-    RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public <T> T get(String key, Class<T> entityClass) {
         try {
-            log.info("Insidde @Class RedisServiceImpl inside @Method get");
+            log.info("Inside @Class RedisServiceImpl inside @Method get");
             Object o = redisTemplate.opsForValue().get(key);
+            if (o == null) {
+                return null;
+            }
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(o.toString(), entityClass);
-        } catch (JacksonException e) {
-            log.error("Exception : ",   e);
+        } catch (JsonProcessingException e) {
+            log.error("Jackson Exception during Redis GET: ", e);
             return null;
         }
     }
@@ -33,12 +36,12 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void set(String key, Object o, Long ttl) {
         try {
-            log.info("Insidde @Class RedisServiceImpl inside @Method set");
+            log.info("Inside @Class RedisServiceImpl inside @Method set");
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonValue = objectMapper.writeValueAsString(o);
             redisTemplate.opsForValue().set(key, jsonValue, ttl, TimeUnit.SECONDS);
-        } catch (JacksonException e) {
-            log.error("Exception : ",   e);
+        } catch (JsonProcessingException e) {
+            log.error("Jackson Exception during Redis SET: ", e);
          }
     }
 }
