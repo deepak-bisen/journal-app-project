@@ -3,7 +3,7 @@ package com.ghtkdb.journal.application.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod; // Required for OPTIONS preflight matching
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -34,9 +35,9 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        // Explicitly permit OPTIONS requests to bypass authentication for CORS preflight
+                        // Explicitly permit ALL preflight OPTIONS requests at the top level
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() 
-                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/public/**", "/health-check").permitAll()
                         .requestMatchers("/journal/**", "/user/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
@@ -48,17 +49,17 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allowed Origin Patterns for deployment flexibility
-        configuration.setAllowedOriginPatterns(Arrays.asList(
+        // Added Netlify and Railway domains explicitly
+        configuration.setAllowedOrigins(Arrays.asList(
             "https://zen-zournal.netlify.app",
-            "http://localhost:*",
-            "http://127.0.0.1:*"
+            "http://localhost:5500",
+            "http://127.0.0.1:5500"
         ));
         
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
-        configuration.setAllowedHeaders(Arrays.asList("*")); 
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With")); 
         configuration.setAllowCredentials(true);
-        configuration.setMaxAge(3600L); // Cache preflight for 1 hour
+        configuration.setMaxAge(3600L); 
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
