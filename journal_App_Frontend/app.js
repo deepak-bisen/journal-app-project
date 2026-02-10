@@ -1,30 +1,42 @@
-const API_BASE = "http://localhost:8080";
+// Update this URL to your production backend URL
+const API_BASE = "https://journal-app-project-production.up.railway.app";
 let currentUser = null;
 const state = { entries: [], weather: null, greeting: "Hello", adminUsers: [] };
 
 async function apiRequest(endpoint, options = {}) {
     const headers = { 'Content-Type': 'application/json', ...options.headers };
     if (currentUser && currentUser.authHeader) headers['Authorization'] = currentUser.authHeader;
+    
+    // Ensure no double slashes if endpoint starts with /
+    const url = endpoint.startsWith('/') ? `${API_BASE}${endpoint}` : `${API_BASE}/${endpoint}`;
+    
     try {
-        const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+        const response = await fetch(url, { ...options, headers });
 
-        // Special handling for admin check during login to avoid error toasts
         if (options.quiet && !response.ok) return null;
 
-        if (response.status === 401) { showToast("Session expired", "error"); logout(); return null; }
-        if (!response.ok) { const error = await response.text(); throw new Error(error || 'Request failed'); }
+        if (response.status === 401) { 
+            showToast("Session expired", "error"); 
+            logout(); 
+            return null; 
+        }
+        
+        if (!response.ok) { 
+            const error = await response.text(); 
+            throw new Error(error || 'Request failed'); 
+        }
+        
         if (response.status === 204) return true;
         const contentType = response.headers.get("content-type");
         return (contentType && contentType.includes("application/json")) ? await response.json() : await response.text();
     } catch (err) {
         if (!options.quiet) {
             console.error("API Error:", err);
-            showToast(err.message, "error");
+            showToast("Connection Error: Check console for details", "error");
         }
         return null;
     }
 }
-
 const router = {
     home: () => currentUser ? router.dashboard() : renderHome(),
     login: () => renderLogin(),
