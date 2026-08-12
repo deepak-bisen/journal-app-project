@@ -18,7 +18,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Autowired
     public RedisServiceImpl( RedisTemplate<String, Object> redisTemplate){
-    this.RedisTemplate<String, Object> redisTemplate = RedisTemplate<String, Object> redisTemplate;
+    this.redisTemplate = redisTemplate;
     }
     
     @Override
