@@ -2,6 +2,7 @@ package com.ghtkdb.journal.application.service.impl;
 
 import com.ghtkdb.journal.application.cache.AppCache;
 import com.ghtkdb.journal.application.entity.WeatherResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,16 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class WeatherService {
     @Value("${weather.api.key}")
     private String apiKey;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
-    private AppCache appCache;
+    private final RestTemplate restTemplate;
+    private final AppCache appCache;
 
     public WeatherResponse getWeather(String city) {
         log.info("Inside @class WeatherService in @method getWeather.");

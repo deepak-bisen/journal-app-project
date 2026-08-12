@@ -5,6 +5,7 @@ import com.ghtkdb.journal.application.entity.User;
 import com.ghtkdb.journal.application.entity.WeatherResponse;
 import com.ghtkdb.journal.application.service.UserService;
 import com.ghtkdb.journal.application.service.impl.WeatherService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,14 +20,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 public class UserControllerImpl implements UserController {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    WeatherService weatherService;
+    private final UserService userService;
+    private final WeatherService weatherService;
 
     @Override
     public ResponseEntity<List<User>> getAllUsers() {

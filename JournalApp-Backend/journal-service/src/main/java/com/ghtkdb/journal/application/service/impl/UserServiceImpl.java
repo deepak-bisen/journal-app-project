@@ -3,6 +3,7 @@ package com.ghtkdb.journal.application.service.impl;
 import com.ghtkdb.journal.application.repository.UserRepository;
 import com.ghtkdb.journal.application.service.UserService;
 import com.ghtkdb.journal.application.entity.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
