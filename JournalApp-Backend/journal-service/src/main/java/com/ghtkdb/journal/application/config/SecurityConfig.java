@@ -29,50 +29,48 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+public SecurityFilterChain securityFilterChain(HttpSecurity http)
+        throws Exception {
 
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+    http
+            .csrf(AbstractHttpConfigurer::disable)
 
-                // Disable Browser Login Popup
-                .httpBasic(AbstractHttpConfigurer::disable)
+            .cors(cors ->
+                    cors.configurationSource(corsConfigurationSource()))
 
-                // Disable Form Login
-                .formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(Customizer.withDefaults())
 
-                .authorizeHttpRequests(auth -> auth
+            .formLogin(AbstractHttpConfigurer::disable)
 
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/",
-                                "/error",
-                                "/health-check",
-                                "/actuator/health",
-                                "/public/**",
-                                "/user/signup",
-                                "/user/login"
-                        ).permitAll()
+                    .requestMatchers(
+                            "/",
+                            "/error",
+                            "/health-check",
+                            "/actuator/**",
+                            "/public/**"
+                    ).permitAll()
 
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.OPTIONS, "/**")
+                    .permitAll()
 
-                        .anyRequest().authenticated()
-                );
+                    .anyRequest().authenticated()
+            );
 
-        return http.build();
-    }
-
+    return http.build();
+}
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-                "https://zen-zournal.netlify.app",
-                "http://localhost:5500",
-                "http://127.0.0.1:5500"
-        ));
+        configuration.setAllowedOriginPatterns(List.of(
+        "https://*.netlify.app",
+        "http://localhost:*",
+        "http://127.0.0.1:*"
+));
 
         configuration.setAllowedMethods(List.of(
                 "GET",
