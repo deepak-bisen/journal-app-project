@@ -14,9 +14,13 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class RedisServiceImpl implements RedisService {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    public RedisServiceImpl( RedisTemplate<String, Object> redisTemplate){
+    this.RedisTemplate<String, Object> redisTemplate = RedisTemplate<String, Object> redisTemplate;
+    }
+    
     @Override
     public <T> T get(String key, Class<T> entityClass) {
         try {
