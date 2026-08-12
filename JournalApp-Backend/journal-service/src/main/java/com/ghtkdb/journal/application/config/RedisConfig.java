@@ -1,4 +1,3 @@
-/*
 package com.ghtkdb.journal.application.config;
 
 import org.springframework.context.annotation.Bean;
@@ -11,14 +10,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Bean
-    public RedisTemplate redisTemplate(RedisConnectionFactory factory){
-        RedisTemplate redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate(
+            RedisConnectionFactory factory) {
+
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
 
         return redisTemplate;
     }
 }
-*/
