@@ -28,7 +28,6 @@ public class User {
     private boolean sentimentAnalysis;
 
     @Column(nullable = false)
-    @JsonIgnore
     private String password;
 
     private String role;
