@@ -49,7 +49,12 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http)
                             "/error",
                             "/health-check",
                             "/actuator/**",
-                            "/public/**"
+                            "/public/**",
+
+                        // Swagger
+                            "/swagger-ui/**",
+                            "/swagger-ui.html",
+                            "/v3/api-docs/**"
                     ).permitAll()
 
                     .requestMatchers(HttpMethod.OPTIONS, "/**")
