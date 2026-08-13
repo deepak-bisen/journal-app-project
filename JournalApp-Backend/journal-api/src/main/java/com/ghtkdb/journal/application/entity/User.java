@@ -28,8 +28,9 @@ public class User {
     private boolean sentimentAnalysis;
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
+    
     private String role;
 
     // This is a relationship to journalEntries within the SAME service's database.
