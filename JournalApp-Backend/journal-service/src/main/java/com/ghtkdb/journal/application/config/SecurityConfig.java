@@ -43,18 +43,11 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http)
             .formLogin(AbstractHttpConfigurer::disable)
 
             .authorizeHttpRequests(auth -> auth
-
-                    .requestMatchers(
-                            "/",
-                            "/error",
-                            "/health-check",
-                            "/actuator/**",
-                            "/public/**",
-
-                        // Swagger
-                            "/swagger-ui/**",
-                            "/swagger-ui.html",
-                            "/v3/api-docs/**"
+            .requestMatchers(
+                "/public/**",
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/swagger-ui.html"
                     ).permitAll()
 
                     .requestMatchers(HttpMethod.OPTIONS, "/**")
