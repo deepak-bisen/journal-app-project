@@ -1,4 +1,4 @@
-package com.ghtkdb.journal.application.config;
+package com.ghtkdb.journal.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
