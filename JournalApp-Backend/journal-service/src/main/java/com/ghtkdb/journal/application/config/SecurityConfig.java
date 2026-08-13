@@ -49,11 +49,13 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http)
                 "/v3/api-docs/**",
                 "/swagger-ui.html"
                     ).permitAll()
+            .requestMatchers("/admin/**")
+            .hasRole("ADMIN")
+                        
+            .requestMatchers(HttpMethod.OPTIONS, "/**")
+            .permitAll()
 
-                    .requestMatchers(HttpMethod.OPTIONS, "/**")
-                    .permitAll()
-
-                    .anyRequest().authenticated()
+            .anyRequest().authenticated()
             );
 
     return http.build();
